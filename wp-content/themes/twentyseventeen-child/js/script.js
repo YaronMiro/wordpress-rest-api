@@ -1,31 +1,47 @@
 (function($) {
+
   console.log(REST_API_EXAMPLE);
 
-//   $.when($.ajax("request1"), $.ajax("request2"), $.ajax("request3"))
-// .then(successCallback, errorHandler);
+  var xhrData = [];
 
-  function successCallback(xhr) {
-    console.log(xhr);
+  function successCallback() {
+    $.each(xhrData, function(key, xhr){
+      
+      $.each(xhr.data, function(index, post){
+        console.log(post.title.rendered);
+      });
+    })
   };
 
   function errorHandler(error) {
-    console.log(error);
+    console.log('Error: ', error);
   };
 
 
-  var $ajaxOne = $.ajax( {
+  var $ajaxOne = $.ajax({
     type: 'GET',
     dataType: 'json',
-    url: REST_API_EXAMPLE.SITE_URL + '/wp-json/wp/v2/movie?per_page=5',
-  } );
+    url: REST_API_EXAMPLE.SITE_URL + '/wp-json/wp/v2/movie?page=1&per_page=5',
+    success: function(data, status, xhr) {
+      xhrData.push({"data": data, "status": status, "xhr": xhr});
+    },
+  });
 
-  var $ajaxTwo = $.ajax( {
+  var $ajaxTwo = $.ajax({
     type: 'GET',
     dataType: 'json',
-    url: REST_API_EXAMPLE.SITE_URL + '/wp-json/wp/v2/movie?per_page=5',
-  } );
+    url: REST_API_EXAMPLE.SITE_URL + '/wp-json/wp/v2/movie?page=2&per_page=5',
+    success: function(data, status, xhr) {
+      xhrData.push({"data": data, "status": status, "xhr": xhr});
+    },
+  });
 
-  $.when([$ajaxOne, $ajaxTwo]).then(successCallback, errorHandler)
 
-      
+
+
+
+$.when.apply($,[$ajaxTwo, $ajaxOne]).then(successCallback, errorHandler);
+
+
+
   })( jQuery );

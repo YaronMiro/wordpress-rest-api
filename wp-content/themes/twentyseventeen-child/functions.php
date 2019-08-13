@@ -31,11 +31,7 @@ function twentyseventeen_child_enqueue_scripts() {
             'publish',
             'pending',
             'draft',
-            'auto-draft',
-            'future',
             'private',
-            'inherit',
-            'trash'
         )    
     );
     $movie_posts = new WP_Query($query_args);
