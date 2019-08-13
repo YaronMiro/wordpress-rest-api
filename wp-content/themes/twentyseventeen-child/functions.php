@@ -21,6 +21,14 @@ function twentyseventeen_child_enqueue_styles() {
  * Enqueue a script.
  */
 function twentyseventeen_child_enqueue_scripts() {
-    wp_enqueue_script( 'my-script', get_stylesheet_directory_uri() . '/js/script.js', array( 'jquery' ), '1.0.0', true );
+    wp_enqueue_script( 'twentyseventeen_child-script', get_stylesheet_directory_uri() . '/js/script.js', array( 'jquery' ), '1.0.0', true );
+    
+    $localize_data = array(
+        'SITE_URL' => get_option('siteurl'),
+    );
+    
+    wp_localize_script('twentyseventeen_child-script', 'REST_API_EXAMPLE', $localize_data);
+
 }
 add_action( 'wp_enqueue_scripts', 'twentyseventeen_child_enqueue_scripts' );
+
