@@ -44,9 +44,10 @@ function twentyseventeen_child_enqueue_scripts() {
         'POSTS_PER_PAGE' => $posts_per_page,
         'TOTAL_PAGES' => ceil($total_movie_posts / $posts_per_page),
     );
-    
+
     wp_localize_script('twentyseventeen_child-script', 'LOCALIZE', $localize_data);
 
 }
 add_action( 'wp_enqueue_scripts', 'twentyseventeen_child_enqueue_scripts' );
+
 
