@@ -21,15 +21,14 @@ get_header(); ?>
 		<main id="main" class="site-main" role="main">
 		<div class="fillters">
 		<ul class="terms-itmes">
-			<?php $parents_terms = get_terms( array( 'taxonomy' => 'genre', 'parent' => 0, 'hide_empty' => false) ); ?>
-			<?php foreach ($parents_terms as $parent): ?>
+			<?php foreach (get_terms(array( 'taxonomy' => 'genre', 'parent' => 0, 'hide_empty' => false)) as $parent): ?>
 				<li>
 					<h6 class="term-item"><?php print $parent->name; ?></h6>
 					<ul class="term-item-childrens">
-					<?php $childrens_terms = get_terms( array( 'taxonomy' => 'genre', 'parent' => $parent->term_id, 'hide_empty' => false) ); ?>
-					<?php foreach ($childrens_terms as $child_term): ?>
+					<?php foreach (get_terms(array( 'taxonomy' => 'genre', 'parent' => $parent->term_id, 'hide_empty' => false)) as $child_term): ?>
 						<li>
-						<?php print $child_term->name; ?>
+							<input type="checkbox" id="<?php print $child_term->term_id; ?>" value="<?php print $child_term->term_id; ?>"/>
+							<label for="<?php print $child_term->term_id; ?>"><?php print $child_term->name; ?></label>
 						</li>
 					<?php endforeach;?>
 					</ul>
