@@ -23,8 +23,7 @@ function twentyseventeen_child_enqueue_styles() {
 function twentyseventeen_child_enqueue_scripts() {
     wp_enqueue_script( 'twentyseventeen_child-script', get_stylesheet_directory_uri() . '/js/script.js', array( 'jquery' ), '1.0.0', true );
     
-
-    // $total_movie_posts = wp_count_posts('movie');
+    
     $query_args = array(
         'post_type' => 'movie',
         'post_status' => array(
@@ -46,7 +45,7 @@ function twentyseventeen_child_enqueue_scripts() {
         'TOTAL_PAGES' => ceil($total_movie_posts / $posts_per_page),
     );
     
-    wp_localize_script('twentyseventeen_child-script', 'REST_API_EXAMPLE', $localize_data);
+    wp_localize_script('twentyseventeen_child-script', 'LOCALIZE', $localize_data);
 
 }
 add_action( 'wp_enqueue_scripts', 'twentyseventeen_child_enqueue_scripts' );
