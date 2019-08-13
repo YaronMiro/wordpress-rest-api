@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Rest Api Example
  * Plugin URI:      PLUGIN SITE HERE
- * Description:     PLUGIN DESCRIPTION HERE
+ * Description:     Rest API Example
  * Author:          YOUR NAME HERE
  * Author URI:      YOUR SITE HERE
  * Text Domain:     rest-api-example
