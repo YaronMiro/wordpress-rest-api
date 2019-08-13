@@ -7,7 +7,8 @@
     var call = $.ajax({
       type: 'GET',
       dataType: 'json',
-      url: LOCALIZE.SITE_URL + `/wp-json/wp/v2/movie?page=${page}&per_page=${LOCALIZE.POSTS_PER_PAGE}`,
+      url: LOCALIZE.SITE_URL + `/wp-json/wp/v2/movie?page=${page}&per_page=${LOCALIZE.POSTS_PER_PAGE}&filter[orderby]=id&order=asc`,
+      async: false,
       success: function(data) {
         posts = posts.concat(data);
       },
@@ -18,9 +19,6 @@
 
    // Handle Ajax Success.
    function successCallback() {
-
-    // Sort the posts by "ID"
-    posts.sort((a, b) => (a.id > b.id) ? 1 : -1)
 
     // Log each post title.
     $.each(posts, function(index, post){
