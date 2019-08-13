@@ -4,24 +4,26 @@
   var genreTerms = [];
   getMovies();
 
-
+  // Update on genre selection.
   $('.genre-filter').change(filterByGenre);
-
 
   function filterByGenre() {
     // Checked
     $self = $(this);
     if(this.checked) {
-      genreTerms.push($self.val())
+      genreTerms.push('.' + $self.val())
     // un-checked    
     } else {
-      var index = genreTerms.indexOf($self.val());
+      var index = genreTerms.indexOf('.' + $self.val());
       if (index > -1) {
         genreTerms.splice(index, 1);
       }
     }
 
-    console.log(genreTerms);
+    $(".movies li").hide(0);
+    $(genreTerms.join(', ')).show(0);
+
+    console.log(genreTerms.join(', '));
   };
 
   function getMovies(){
@@ -52,12 +54,8 @@
       // Log each post title.
       $( ".loader" ).fadeOut();
       $.each(movies, function(index, movie){
-
-        movie.genre = $.map(movie.genre, function(genre) {
-          return 'genre-term-id-'+ genre;
-        });
-
-        $(".movies").append(`<li class="${movie.genre.join(' ')}">${movie.title.rendered}</li>`);
+        movie.genreClass = $.map(movie.genre, function(genre) {return 'genre-term-id-'+ genre}).join(' ');
+        $(".movies").append(`<li class="${movie.genreClass}">${movie.title.rendered}</li>`);
       })
     };
     
@@ -68,7 +66,6 @@
   
     // Run all ajaxCalls simultaneously.
     $.when.apply($, xhrCalls).then(successCallback, errorHandler);
-
   }
 
   })( jQuery );
