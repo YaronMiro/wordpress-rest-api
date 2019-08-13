@@ -64,7 +64,7 @@
       var call = $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: LOCALIZE.SITE_URL + `/wp-json/wp/v2/movie1?page=${page}&per_page=${LOCALIZE.POSTS_PER_PAGE}`,
+        url: LOCALIZE.SITE_URL + `/wp-json/wp/v2/movie?page=${page}&per_page=${LOCALIZE.POSTS_PER_PAGE}`,
         success: function(data) {
           movies = movies.concat(data);
         },
