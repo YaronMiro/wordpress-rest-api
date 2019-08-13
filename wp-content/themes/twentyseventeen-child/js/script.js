@@ -1,25 +1,30 @@
 (function($) {
+  
+  var movies = [];
+  var genreTerms = [];
+  getMovies();
 
 
-  $('document').ready(function(){
-
-    getMovies();
-
-  })
+  $('.genre-filter').change(filterByGenre);
 
 
+  function filterByGenre() {
+    // Checked
+    $self = $(this);
+    if(this.checked) {
+      genreTerms.push($self.val())
+    // un-checked    
+    } else {
+      var index = genreTerms.indexOf($self.val());
+      if (index > -1) {
+        genreTerms.splice(index, 1);
+      }
+    }
 
-
-  function getFilters(){
-
-    var posts = [];
-    var xhrCalls = [];
-    
-  }
+    console.log(genreTerms);
+  };
 
   function getMovies(){
-
-    var posts = [];
     var xhrCalls = [];
     $site_main = $( ".site-main" );
     $site_main.find(".movies-main").append( "<h5 class=\"loader\">Loading...</h5>" );
@@ -31,7 +36,7 @@
         dataType: 'json',
         url: LOCALIZE.SITE_URL + `/wp-json/wp/v2/movie?page=${page}&per_page=${LOCALIZE.POSTS_PER_PAGE}`,
         success: function(data) {
-          posts = posts.concat(data);
+          movies = movies.concat(data);
         },
       });
       // Add ajax call to the array.
@@ -42,14 +47,17 @@
      function successCallback() {
   
       // Sort the posts by "ID"
-      posts.sort((a, b) => (a.id > b.id) ? 1 : -1)
+      movies.sort((a, b) => (a.id > b.id) ? 1 : -1)
   
       // Log each post title.
-      $( ".entry-content .loader" ).fadeOut();
-      $.each(posts, function(index, post){
-        console.log(post.title.rendered);
-        $(".movies").append(`<li>${post.title.rendered}</li>`);
-  
+      $( ".loader" ).fadeOut();
+      $.each(movies, function(index, movie){
+
+        movie.genre = $.map(movie.genre, function(genre) {
+          return 'genre-term-id-'+ genre;
+        });
+
+        $(".movies").append(`<li class="${movie.genre.join(' ')}">${movie.title.rendered}</li>`);
       })
     };
     
