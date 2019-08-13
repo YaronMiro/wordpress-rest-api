@@ -5,10 +5,12 @@
   var xhrData = [];
 
   function successCallback() {
+
+    console.log(xhrData);
     $.each(xhrData, function(key, xhr){
       
       $.each(xhr.data, function(index, post){
-        console.log(post.title.rendered);
+        // console.log(post.title.rendered);
         // document.write(post.title.rendered);
         // document.write("</br>");
 
