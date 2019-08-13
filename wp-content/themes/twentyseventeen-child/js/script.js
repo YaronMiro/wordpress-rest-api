@@ -6,6 +6,13 @@
 
   // Update on genre selection.
   $('.genre-filter').change(filterByGenre);
+  $('.clear-btn').click(clearFilters);
+
+  function clearFilters() {
+    genreTerms = [];
+    $('.genre-filter').prop( "checked", false );
+    setMoviesDisplay('show');
+  }
 
   function filterByGenre() {
     // Checked
@@ -20,11 +27,22 @@
       }
     }
 
-    $(".movies li").hide(0);
-    $(genreTerms.join(', ')).show(0);
-
-    console.log(genreTerms.join(', '));
+    // Show all (same as clear);
+    if (!genreTerms.length) {
+      setMoviesDisplay('show');
+    }
+    // Filter by genre
+    else {
+      setMoviesDisplay('hide');
+      setMoviesDisplay('show', genreTerms.join(', '));
+    }
   };
+
+  function setMoviesDisplay(type, selector) {
+    var selector = selector ? selector : ".movies li";
+    var $movies = $(selector);
+    type == 'hide' ? $movies.hide(0) : $movies.show(0);
+  }
 
   function getMovies(){
     var xhrCalls = [];

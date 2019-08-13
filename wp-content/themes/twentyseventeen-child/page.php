@@ -20,6 +20,7 @@ get_header(); ?>
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main" role="main">
 		<div class="fillters" style="float: left;">
+		<button style="padding: .5rem; margin-bottom: 1rem;" class="clear-btn" type="button" value="clear">Clear</button>
 		<ul style="list-style: none" class="terms-items">
 			<?php foreach (get_terms(array( 'taxonomy' => 'genre', 'parent' => 0, 'hide_empty' => false)) as $parent): ?>
 				<li>
