@@ -6,7 +6,7 @@
  */
 function genre_init() {
 	register_taxonomy( 'genre', array( 'movie' ), array(
-		'hierarchical'      => false,
+		'hierarchical'      => true,
 		'public'            => true,
 		'show_in_nav_menus' => true,
 		'show_ui'           => true,

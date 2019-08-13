@@ -26,7 +26,7 @@
     posts.sort((a, b) => (a.id > b.id) ? 1 : -1)
 
     // Log each post title.
-    $( ".entry-content .loader" ).fadeOut(100);
+    $( ".entry-content .loader" ).fadeOut();
     $.each(posts, function(index, post){
       console.log(post.title.rendered);
       $(".movies").append(`<li>${post.title.rendered}</li>`);
