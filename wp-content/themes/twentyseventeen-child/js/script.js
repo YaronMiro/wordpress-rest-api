@@ -2,6 +2,7 @@
   
   var movies = [];
   var genreTerms = [];
+  var loadMoreQuantity = 10;
   var $genreFilters = $('.genre-filter');
   var $resetButton = $('.reset-btn');
   var $searchBox = $(".search-box");
@@ -19,7 +20,7 @@
     genreTerms = [];
     $genreFilters.prop('checked', false);
     $searchBox.val('');
-    setMoviesDisplay('show');
+    setMovieDisplayMode('show');
   }
 
   // Filter by genre (checkbox).
@@ -38,17 +39,17 @@
 
     // In case all checkbox were unchecked.
     if (!genreTerms.length) {
-      setMoviesDisplay('show');
+      setMovieDisplayMode('show');
     }
     // In case we have at least one checkbox checked.
     else {
-      setMoviesDisplay('hide');
-      setMoviesDisplay('show', genreTerms.join(', '));
+      setMovieDisplayMode('hide');
+      setMovieDisplayMode('show', genreTerms.join(', '));
     }
   };
 
   // Show or Hide Movies.
-  function setMoviesDisplay(type, selector) {
+  function setMovieDisplayMode(type, selector) {
     var selector = selector ? selector : '.movies li';
     var $movies = $(selector);
     type == 'hide' ? $movies.hide(0) : $movies.show(0);
@@ -68,7 +69,7 @@
       var $movie = $(movie);
       var searchText = $searchBox.val().toLowerCase();
       var movieTitle = $movie.text().toLowerCase();
-      movieTitle.indexOf(searchText) > -1 ? $movie.show(0) : $movie.hide(0);
+      movieTitle.indexOf(searchText) > -1 ? setMovieDisplayMode('show', $movie) : setMovieDisplayMode('hide', $movie);
     })
   }
 
