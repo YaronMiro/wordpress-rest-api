@@ -2,12 +2,18 @@
   
   var movies = [];
   var genreTerms = [];
+
+  var $genreFilters = $('.genre-filter');
+  var $resetButton =  $('.reset-btn');
+  var $searchButton = $(".search-box");
+
   setFiltersMode('disabled');
   getMovies();
 
   // Update on genre selection.
-  $(".genre-filter").change(filterByGenre);
-  $(".clear-btn").click(clearFilters);
+  $genreFilters.change(filterByGenre);
+  $resetButton.click(clearFilters);
+  $searchButton.keyup(filterBySearch)
 
   function clearFilters() {
     genreTerms = [];
@@ -49,8 +55,30 @@
   // Enable or Disable all filters.
   function setFiltersMode(type) {
     var mode = type === 'disabled' ? true : false
-    $('.genre-filter').prop('disabled', mode);
-    $('.clear-btn').prop('disabled', mode)
+    $genreFilters.prop('disabled', mode);
+    $resetButton.prop('disabled', mode)
+    $searchButton.prop('disabled', mode)
+  }
+
+  // Filter movies by title
+  function filterBySearch() {
+    // Declare variables
+    var input, filter, ul, li, i, txtValue;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName('li');
+  
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+      a = li[i].getElementsByTagName("a")[0];
+      txtValue = a.textContent || a.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = "";
+      } else {
+        li[i].style.display = "none";
+      }
+    }
   }
 
   // Get the movies from the server.
