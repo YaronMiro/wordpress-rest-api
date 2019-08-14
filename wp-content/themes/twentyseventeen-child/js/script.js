@@ -3,7 +3,7 @@
   var movies = [];
   var genreTerms = [];
   var $genreFilters = $('.genre-filter');
-  var $resetButton =  $('.reset-btn');
+  var $resetButton = $('.reset-btn');
   var $searchBox = $(".search-box");
 
   // Update on genre selection.
@@ -22,12 +22,13 @@
     setMoviesDisplay('show');
   }
 
+  // Filter by genre (checkbox).
   function filterByGenre() {
-    // Checked.
+    // Checked action.
     $self = $(this);
     if(this.checked) {
       genreTerms.push('.' + $self.val())
-    // Un-checked.  
+    // Un-checked action.  
     } else {
       var index = genreTerms.indexOf('.' + $self.val());
       if (index > -1) {
@@ -35,11 +36,11 @@
       }
     }
 
-    // Show all (same as clear);
+    // In case all checkbox were unchecked.
     if (!genreTerms.length) {
       setMoviesDisplay('show');
     }
-    // Filter by genre.
+    // In case we have at least one checkbox checked.
     else {
       setMoviesDisplay('hide');
       setMoviesDisplay('show', genreTerms.join(', '));
@@ -61,10 +62,8 @@
     $searchBox.prop('disabled', mode)
   }
 
-  // Filter movies by title
+  // Filter movies by title (search box)
   function filterBySearch() {
-    // Loop through all list items, and hide those who don'
-    // match the search query.
     $(".movies li").each(function(index, movie){
       var $movie = $(movie);
       var searchText = $searchBox.val().toLowerCase();
