@@ -2,22 +2,23 @@
   
   var movies = [];
   var genreTerms = [];
-
   var $genreFilters = $('.genre-filter');
   var $resetButton =  $('.reset-btn');
   var $searchBox = $(".search-box");
 
-  setFiltersMode('disabled');
-  getMovies();
-
   // Update on genre selection.
   $genreFilters.change(filterByGenre);
-  $resetButton.click(clearFilters);
   $searchBox.keyup(filterBySearch)
-
+  $resetButton.click(clearFilters);
+  
+  setFiltersMode('disabled');
+  getMovies();
+  
+  // Clear all filters.
   function clearFilters() {
     genreTerms = [];
-    $('.genre-filter').prop("checked", false);
+    $genreFilters.prop('checked', false);
+    $searchBox.val('');
     setMoviesDisplay('show');
   }
 
