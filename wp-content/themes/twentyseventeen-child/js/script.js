@@ -2,17 +2,28 @@
 
   // Filter Checkbox.
   var $filterCheckboxes = $('input[type="checkbox"]');
+  var $searchBox = $(".search-box");
   var postsPerPage = 3;
   var currentPage = 1;
 
 
   $('.reset-btn').click(function () {
     $('.genre-filter').prop('checked', false);
+    $searchBox.val('');
     $filteredResults = $('.item');
     $filteredResults.hide();
     $filteredResults.slice(0, postsPerPage).fadeIn();
     $("#loadMore").fadeIn('slow');
     currentPage = 1;
+  });
+
+  $searchBox.keyup(function() {
+    $(".item").each(function(index, movie){
+      var $movie = $(movie);
+      var searchText = $searchBox.val().toLowerCase();
+      var movieTitle = $movie.text().toLowerCase();
+      movieTitle.indexOf(searchText) > -1 ? setMovieDisplayMode('show', $movie) : setMovieDisplayMode('hide', $movie);
+    })
   });
 
 
