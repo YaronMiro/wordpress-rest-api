@@ -1,124 +1,55 @@
 (function($) {
   
-  var movies = [];
-  var genreTerms = [];
-  var loadMoreQuantity = 10;
-  var $genreFilters = $('.genre-filter');
-  var $resetButton = $('.reset-btn');
-  var $searchBox = $(".search-box");
+  var $filterCheckboxes = $('input[type="checkbox"]');
 
-  // Update on genre selection.
-  $genreFilters.change(filterByGenre);
-  $searchBox.keyup(filterBySearch)
-  $resetButton.click(clearFilters);
-  
-  setFiltersMode('disabled');
-  getMovies();
-  
-  // Clear all filters.
-  function clearFilters() {
-    genreTerms = [];
-    $genreFilters.prop('checked', false);
-    $searchBox.val('');
-    setMovieDisplayMode('show');
-  }
+$filterCheckboxes.on('change', function() {
 
-  // Filter by genre (checkbox).
-  function filterByGenre() {
-    // Checked action.
-    $self = $(this);
-    if(this.checked) {
-      genreTerms.push('.' + $self.val())
-    // Un-checked action.  
-    } else {
-      var index = genreTerms.indexOf('.' + $self.val());
-      if (index > -1) {
-        genreTerms.splice(index, 1);
-      }
+  var selectedFilters = {};
+
+  $filterCheckboxes.filter(':checked').each(function() {
+
+    if (!selectedFilters.hasOwnProperty(this.name)) {
+      selectedFilters[this.name] = [];
     }
 
-    // In case all checkbox were unchecked.
-    if (!genreTerms.length) {
-      setMovieDisplayMode('show');
-    }
-    // In case we have at least one checkbox checked.
-    else {
-      setMovieDisplayMode('hide');
-      setMovieDisplayMode('show', genreTerms.join(', '));
-    }
-  };
+    selectedFilters[this.name].push(this.value);
 
-  // Show or Hide Movies.
-  function setMovieDisplayMode(type, selector) {
-    var selector = selector ? selector : '.movies li';
-    var $movies = $(selector);
-    type == 'hide' ? $movies.hide(0) : $movies.show(0);
-  }
+  });
 
-  // Enable or Disable all filters.
-  function setFiltersMode(type) {
-    var mode = type === 'disabled' ? true : false
-    $genreFilters.prop('disabled', mode);
-    $resetButton.prop('disabled', mode)
-    $searchBox.prop('disabled', mode)
-  }
+  // create a collection containing all of the filterable elements
+  var $filteredResults = $('.item');
 
-  // Filter movies by title (search box)
-  function filterBySearch() {
-    $(".movies li").each(function(index, movie){
-      var $movie = $(movie);
-      var searchText = $searchBox.val().toLowerCase();
-      var movieTitle = $movie.text().toLowerCase();
-      movieTitle.indexOf(searchText) > -1 ? setMovieDisplayMode('show', $movie) : setMovieDisplayMode('hide', $movie);
-    })
-  }
+  // loop over the selected filter name -> (array) values pairs
+  $.each(selectedFilters, function(name, filterValues) {
 
-  // Get the movies from the server.
-  function getMovies(){
-    var xhrCalls = [];
-    $site_main = $( '.site-main' );
-    $site_main.find('.movies-main').append( '<h5 class=\"loader\">Loading...</h5>' );
-    $site_main.find('.movies-main').append( '<ul class=\"movies\"></ul>' );
-  
-    for (var page = 1; page <= LOCALIZE.TOTAL_PAGES; page++) {
-      var call = $.ajax({
-        type: 'GET',
-        dataType: 'json',
-        url: LOCALIZE.SITE_URL + `/wp-json/wp/v2/movie?page=${page}&per_page=${LOCALIZE.POSTS_PER_PAGE}`,
-        success: function(data) {
-          movies = movies.concat(data);
-        },
+    // filter each .flower element
+    $filteredResults = $filteredResults.filter(function() {
+
+      var matched = false,
+        currentFilterValues = $(this).data('category').split(' ');
+
+      // loop over each category value in the current .flower's data-category
+      $.each(currentFilterValues, function(_, currentFilterValue) {
+
+        // if the current category exists in the selected filters array
+        // set matched to true, and stop looping. as we're ORing in each
+        // set of filters, we only need to match once
+
+        if ($.inArray(currentFilterValue, filterValues) != -1) {
+          matched = true;
+          return false;
+        }
       });
-      // Add ajax call to the array.
-      xhrCalls.push(call)
-    }
-  
-     // Handle Ajax Success.
-     function successCallback() {
-  
-      // Sort the posts by "ID".
-      movies.sort((a, b) => (a.id > b.id) ? 1 : -1)
-      
-      // Hide loader and enable filters (since we have all the data).
-      $( '.loader' ).fadeOut();
-      setFiltersMode('enabled');
 
-      // Inject each movie into the DOM.
-      $.each(movies, function(index, movie){
-        movie.genreClass = $.map(movie.genre, function(genre) {return 'genre-term-id-'+ genre}).join(' ');
-        $(".movies").append(`<li class="${movie.genreClass}">${movie.title.rendered}</li>`);
-      })
-    };
-    
-    // Handle Ajax Error.
-    function errorHandler(error) {
-      $( '.loader' ).fadeOut();
-      $(".movies").append(`<li>We have encountered an error, please try again by reloading the page</li>`);
-      console.log('Error: ', error);
-    };
-  
-    // Run all ajaxCalls simultaneously.
-    $.when.apply($, xhrCalls).then(successCallback, errorHandler);
-  }
+      // if matched is true the current .flower element is returned
+      return matched;
+
+    });
+  });
+
+  $('.item').hide().filter($filteredResults).show();
+
+});
+
 
   })( jQuery );
