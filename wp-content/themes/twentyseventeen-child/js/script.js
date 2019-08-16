@@ -5,6 +5,17 @@
   var postsPerPage = 3;
   var currentPage = 1;
 
+
+  $('.reset-btn').click(function () {
+    $('.genre-filter').prop('checked', false);
+    $filteredResults = $('.item');
+    $filteredResults.hide();
+    $filteredResults.slice(0, postsPerPage).fadeIn();
+    $("#loadMore").fadeIn('slow');
+    currentPage = 1;
+  });
+
+
   $(".item").slice(0, postsPerPage).show();
 
   // var $filteredResults = $('.item:hidden');
@@ -52,7 +63,7 @@
       });
     });
 
-    $('.item').hide().filter($filteredResults).slice(0, postsPerPage).show();
+    $('.item').hide().filter($filteredResults).slice(0, postsPerPage).fadeIn();
   });
 
   // Load More Button.
@@ -70,6 +81,9 @@
 
       currentPage++;
   });
+
+  
+  
 
 
   })( jQuery );
