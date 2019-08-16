@@ -4,8 +4,6 @@
   var $filterCheckboxes = $('input[type="checkbox"]');
   var postsPerPage = 3;
   var currentPage = 1;
-  var totalPosts = $('.movies').children().length;
-
 
   $(".item").slice(0, postsPerPage).show();
 
@@ -61,13 +59,12 @@
 
   $("#loadMore").on('click', function (e) {
       e.preventDefault();
-      // $('.item').hide().filter($filteredResults).slice(0, postsPerPage).show();
 
       var start = currentPage * postsPerPage;
       var end = postsPerPage + start;
       $filteredResults.slice(start, end).fadeIn();
 
-      if (end >= totalPosts) {
+      if (end >= $filteredResults.length) {
           $("#loadMore").fadeOut('slow');
       }
 
