@@ -1,55 +1,78 @@
 (function($) {
-  
+
+  // Filter Checkbox.
   var $filterCheckboxes = $('input[type="checkbox"]');
+  var postsPerPage = 3;
+  var currentPage = 1;
+  var totalPosts = $('.movies').children().length;
 
-$filterCheckboxes.on('change', function() {
 
-  var selectedFilters = {};
+  $(".item").slice(0, postsPerPage).show();
 
-  $filterCheckboxes.filter(':checked').each(function() {
-
-    if (!selectedFilters.hasOwnProperty(this.name)) {
-      selectedFilters[this.name] = [];
-    }
-
-    selectedFilters[this.name].push(this.value);
-
-  });
-
-  // create a collection containing all of the filterable elements
+  // var $filteredResults = $('.item:hidden');
   var $filteredResults = $('.item');
 
-  // loop over the selected filter name -> (array) values pairs
-  $.each(selectedFilters, function(name, filterValues) {
+  $filterCheckboxes.on('change', function() {
 
-    // filter each .flower element
-    $filteredResults = $filteredResults.filter(function() {
+    var selectedFilters = {};
 
-      var matched = false,
-        currentFilterValues = $(this).data('category').split(' ');
+    $filterCheckboxes.filter(':checked').each(function() {
 
-      // loop over each category value in the current .flower's data-category
-      $.each(currentFilterValues, function(_, currentFilterValue) {
+      if (!selectedFilters.hasOwnProperty(this.name)) {
+        selectedFilters[this.name] = [];
+      }
 
-        // if the current category exists in the selected filters array
-        // set matched to true, and stop looping. as we're ORing in each
-        // set of filters, we only need to match once
-
-        if ($.inArray(currentFilterValue, filterValues) != -1) {
-          matched = true;
-          return false;
-        }
-      });
-
-      // if matched is true the current .flower element is returned
-      return matched;
+      selectedFilters[this.name].push(this.value);
 
     });
+
+    // loop over the selected filter name -> (array) values pairs
+    $.each(selectedFilters, function(name, filterValues) {
+
+      // filter each .flower element
+      $filteredResults = $filteredResults.filter(function() {
+
+        var matched = false,
+          currentFilterValues = $(this).data('category').split(' ');
+
+        // loop over each category value in the current .flower's data-category
+        $.each(currentFilterValues, function(_, currentFilterValue) {
+
+          // if the current category exists in the selected filters array
+          // set matched to true, and stop looping. as we're ORing in each
+          // set of filters, we only need to match once
+
+          if ($.inArray(currentFilterValue, filterValues) != -1) {
+            matched = true;
+            return false;
+          }
+        });
+
+        // if matched is true the current .flower element is returned
+        return matched;
+
+      });
+    });
+
+    $('.item').hide().filter($filteredResults).slice(0, postsPerPage).show();
   });
 
-  $('.item').hide().filter($filteredResults).show();
+  // Load More Button.
 
-});
+  $("#loadMore").on('click', function (e) {
+      e.preventDefault();
+      // $('.item').hide().filter($filteredResults).slice(0, postsPerPage).show();
+
+      var start = currentPage * postsPerPage;
+      var end = postsPerPage + start;
+      $filteredResults.slice(start, end).fadeIn();
+
+      if (end >= totalPosts) {
+          $("#loadMore").fadeOut('slow');
+      }
+
+      currentPage++;
+  });
 
 
   })( jQuery );

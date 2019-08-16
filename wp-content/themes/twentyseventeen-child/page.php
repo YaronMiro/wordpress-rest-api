@@ -73,12 +73,15 @@ $posts = $posts->get_posts();
 			$termsString .= $term->slug.' ';
 		}
 	?> 
-		<div class="item" data-id="<?php echo $post->post_name; ?>" data-category="<?php echo $termsString; ?>">
+		<div class="item" style="display:none" data-id="<?php echo $post->post_name; ?>" data-category="<?php echo $termsString; ?>">
 			<div><?php echo $post->post_title; ?></div>
 		</div>
 
 	<?php }; ?>
 </div>
+
+<button id="loadMore" style="padding: .5rem; margin-bottom: 1rem;" class="load-btn" type="button">Load More</button>
+
 
 <?php
 get_footer();
